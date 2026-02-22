@@ -27,5 +27,35 @@
  *   // => { totalChai: 0, totalRevenue: 0 }
  */
 export function chaiTapriRevenue(customers) {
-  // Your code here
+  if (
+    customers <= 0 ||
+    typeof customers === "string" ||
+    !Number.isInteger(customers)
+  ) {
+    return {
+      totalChai: 0,
+      totalRevenue: 0,
+    }
+  }
+  let adraktemp = 1; // 2
+  let cuttingtemp = 1; // 2
+  let adrakChai = 0;
+  let cuttingChai = 0;
+
+  for (let i = 1; i <= customers; i++) {
+    if (i % 3 === 0) {
+      adrakChai = adraktemp * 15; // 15
+      adraktemp++;
+    } else {
+      cuttingChai = cuttingtemp * 10; // 10 + 20 + 30 + 40
+      cuttingtemp++;
+    }
+  }
+
+  let totalPaisa = adrakChai + cuttingChai;
+
+  return {
+    totalChai: customers,
+    totalRevenue: totalPaisa,
+  };
 }

@@ -13,8 +13,8 @@
  *   - If the attempt is "fail", add wait time and try again
  *   - Wait times follow exponential backoff: 1s, 2s, 4s, 8s
  *     (wait time is added AFTER a failed attempt, before next retry)
- *   - Maximum 5 attempts total (if all fail, stop after 5th)
- *   - totalWaitTime = sum of all wait times between attempts
+ *   - Maximum 5 attempts total (if all fail, stop after 5th).
+ *   - totalWaitTime = sum of all wait times between attempts.
  *
  * Validation:
  *   - Agar outcomes array nahi hai ya empty hai,
@@ -35,5 +35,35 @@
  *   // => { attempts: 5, success: false, totalWaitTime: 15 }
  */
 export function upiRetry(outcomes) {
-  // Your code here
+  if (!Array.isArray(outcomes) || outcomes.length === 0) {
+    return { attempts: 0, success: false, totalWaitTime: 0 };
+  }
+
+  let attempts = 0;
+  let success = false;
+  let totalWaitTime = 0;
+  let wait = 1;
+  let i = 0;
+
+  do {
+    attempts++;
+
+    if (outcomes[i] === "success") {
+      success = true;
+      break;
+    }
+
+    if (outcomes[i] === "fail" && attempts < 5) {
+      totalWaitTime += wait;
+      wait *= 2;
+    }
+
+    i++;
+  } while (attempts < 5 && i < outcomes.length);
+
+  return {
+    attempts,
+    success,
+    totalWaitTime,
+  };
 }
